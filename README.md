@@ -1,4 +1,4 @@
-TITLE: Issue with custom header in nested Stack navigator
+## Issue with custom header in nested Stack navigator
 
 I have a folder strusture like this:
 
