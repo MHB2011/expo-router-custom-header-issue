@@ -1,50 +1,47 @@
-# Welcome to your Expo app 👋
+TITLE: Issue with custom header in nested Stack navigator
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+I have a folder strusture like this:
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+src/
+  app/
+    (app)/
+      _layout.tsx
+      index.tsx (App layout)
+      (auxiliary)/some-feature/
+        index.tsx
+    _layout.tsx (Root layout)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+In the Root layout i return the Stack navigator with a custom header like this:
 
-## Learn more
+```
+<Stack
+  initialRouteName="(app)/index"
+  screenOptions={{
+    header: (props) => <Header {...props} />,
+  }}
+/>
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+In the App layout i return the Slot component like this:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+return <Slot />;
+```
 
-## Join the community
+In the `(app)/index.tsx` i modify the Screen options like this:
 
-Join our community of developers creating universal apps.
+```
+<Stack.Screen
+  options={{
+    headerTitle: () => <Logo size={85} />,
+  }}
+/>
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The issue is that the headerTitle is not being displayed when i navigate to the `(app)/index` screen.
+The `headerTitle` becomes undefined. Its probably overriden by the Slot component ?
+If i remove `(app)/_layout.tsx` everything works fine.
+
+I have tried defining Screen options inside the `_layout.tsx` but it doesn't work.
